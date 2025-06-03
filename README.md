@@ -7,6 +7,7 @@ Conda environments with Python 2.7
 Packages with specific versions of SpaCy and NumPy.
 
 BAM to Pileup:
+
 First of all, we convert the BAM files to pileup format using the Samtools tool. This step is necessary because both nucleotide diversity calculation and sweep detection require this input structure.
 Specifically, we use the following command line:
 
