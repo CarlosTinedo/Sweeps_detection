@@ -63,3 +63,23 @@ END {
 
 ```
 With this script, we will obtain the percentage of missing data, if any. This first allows us to determine whether a subsequent filtering step will be necessary to avoid errors in the calculation of nucleotide variability. Additionally, it also provides an indication of the sequencing quality of the pools.
+
+Next, we must remove all lines that either lack counts or have missing information. We do this using the BASH script killer.sh. This script simply removes lines with missing values in columns 4 to 6.
+
+```
+#!/bin/bash
+#$ -cwd
+#$ -V
+
+source /users-d2/c.m.tinedo/.bashrc
+
+# Nombre del archivo de entrada
+input="PATH/name.pileup"
+
+# Nombre del archivo de salida
+output="PATH/filtrado_name.pileup"
+
+# Filtrar liíneas que no contienen la información para los counts y calidad, es decir,tienen missing
+awk '!( $4 == 0 && $5 == "." && $6 == "." )' "$input" > "$output"
+```
+
