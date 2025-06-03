@@ -146,3 +146,21 @@ OTHER_LINES="${BASENAME}_nonX.pileup"
 grep '^Dsim_X' "$PILEUP_FILE" > "$X_LINES"
 grep -v '^Dsim_X' "$PILEUP_FILE" > "$OTHER_LINES"
 ```
+
+This script, in our case, requires a launcher script for the Hércules node, where the input or original pileup file to be used is defined and where execution permissions are granted.
+
+The name of this script is distribuidora.sh, is the next one.
+
+```
+#!/bin/bash
+#$ -cwd
+#$ -V
+
+chmod +x separador_pileup.sh
+
+SCRIPT_PATH/separador_pileup.sh ORIGINAL_PILEUP_PATH/original.pileup
+
+```
+
+## Nucleotide diversity calculation
+
