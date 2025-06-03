@@ -83,3 +83,15 @@ output="PATH/filtrado_name.pileup"
 awk '!( $4 == 0 && $5 == "." && $6 == "." )' "$input" > "$output"
 ```
 
+Once we have removed all the missing positions, we now proceed with the filtering, in this case focusing on the chromosomes or DNA of interest.
+
+## Remove mitochondrial DNA and the Y chromosome
+
+We only use the four autosomal chromosomes and the X sex chromosome; all other genetic structures must be removed (this applies in the case of Drosophila melanogaster). Therefore, we must eliminate the Y sex chromosome, since all individuals are males, a feature stemming from the need to distinguish between different Drosophila species, and also the mitochondrial DNA, due to its high variability.
+
+To perform this function, we use the BASH script called remove_mito.sh.
+
+```
+  samtools mpileup -f PATH/reference.FASTA PATH/BAMfile > PATH/name.pileup
+```
+
