@@ -14,5 +14,5 @@ samtools mpileup -f PATH/reference.FASTA PATH/BAMfile > PATH/name.pileup
 
 We will need a Conda environment that includes the Samtools tool. Additionally, a reference FASTA file is also required in order to map and convert the BAM file into a Pileup file.
 
-Missinga calculation and removing:
+Missing calculation and removing:
 
