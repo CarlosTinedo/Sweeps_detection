@@ -92,6 +92,57 @@ We only use the four autosomal chromosomes and the X sex chromosome; all other g
 To perform this function, we use the BASH script called remove_mito.sh.
 
 ```
-  samtools mpileup -f PATH/reference.FASTA PATH/BAMfile > PATH/name.pileup
+#!/bin/bash
+
+# Asegurarse del input de entrada
+if [ $# -lt 1 ]; then
+    echo "Uso: $0 archivo.pileup [archivo_salida]"
+    exit 1
+fi
+
+entrada="$1"
+salida="${2:-sin_mito_y.pileup}"
+
+if [ ! -f "$entrada" ]; then
+    echo "El archivo '$entrada' no existe."
+    exit 1
+fi
+
+# Eliminamos líneas que contienen 'Dsim_mitochondrion' o 'Dsim_Y', aquí lo pone para simulans, pero lo mismo para melano, eso si poniendo su nomenclatura
+grep -Ev 'Dsim_mitochondrion|(^|[[:space:]])Dsim_Y([[:space:]]|$)' "$entrada" > "$salida"
+
+# Opcional: contar líneas eliminadas
+eliminadas=$(grep -Ec 'Dsim_mitochondrion|(^|[[:space:]])Dsim_Y([[:space:]]|$)' "$entrada")
+
 ```
 
+## Distribution of chromosomes in two files
+
+Once we have completed all this filtering, we can start processing the input and focus on calculating pi and searching for sweeps. However, before that, since the autosomal chromosomes and the X chromosome differ in variability and effective size, we must separate them—creating one file for the autosomes and another pileup containing only the X chromosome from the pool.
+
+To carry out this part of the process, we use a BASH script called separador_pileup.sh. This script uses grep to search for the X chromosome in the file and export it to a new file, and with the -v option, we do the opposite: we export everything that is not the X chromosome.
+
+Below, I present the script with comments.
+
+```
+#!/bin/bash
+#$ -cwd
+#$ -V
+
+# Verificamos el archivo de entrada
+if [ $# -ne 1 ]; then
+    echo "Uso: $0 archivo.pileup"
+    exit 1
+fi
+
+PILEUP_FILE="$1"
+BASENAME=$(basename "$PILEUP_FILE" .pileup)
+
+# Definimos los archivos de salida
+X_LINES="${BASENAME}_X.pileup"
+OTHER_LINES="${BASENAME}_nonX.pileup"
+
+# Creamos los nuevos pileup con el comando grep
+grep '^Dsim_X' "$PILEUP_FILE" > "$X_LINES"
+grep -v '^Dsim_X' "$PILEUP_FILE" > "$OTHER_LINES"
+```
