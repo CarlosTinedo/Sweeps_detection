@@ -179,3 +179,28 @@ The required parameters are:
 - The maximum coverage
 - The window size, in our case 10,000 positions
 - The step size between windows, which we set to 1 so that there are no gaps but also no overlaps, thus covering the entire genome
+
+To run the genomic software Popoolation, we use the script called popoolation.sh, where we call its Perl script, define the input, output, and all the previously mentioned parameters.
+
+```
+#!/bin/bash
+#$ -cwd
+#$ -V
+
+source /users-d2/c.m.tinedo/.bashrc
+
+perl /users-d2/c.m.tinedo/sweeps/popoolation/Variance-sliding.pl \
+  --input /users-d2/c.m.tinedo/sweeps/S20660000922_sm_nm_y_p_nonX.pileup \
+  --output /users-d2/c.m.tinedo/sweeps/popoolation/variance_S20660000922_sm_nm_y_p_nonX.pileup \
+  --snp-output snps_nonX_usados_S20660000922.txt \
+  --measure pi \
+  --pool-size 100 \
+  --fastq-type illumina \
+  --min-count 2 \
+  --min-coverage 20 \
+  --max-coverage 100 \
+  --window-size 10000 \
+  --step-size 1
+```
+
+
