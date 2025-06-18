@@ -164,3 +164,25 @@ SCRIPT_PATH/separador_pileup.sh ORIGINAL_PILEUP_PATH/original.pileup
 
 ## Nucleotide diversity calculation
 
+To calculate nucleotide diversity, we used the genomic software Popoolation.
+This software computes nucleotide diversity, that is, theta (θ) per position. To do this, it requires a pileup file from the pool under study. In addition to providing the probability of divergence within a population for each position in the sequence, it also gives an estimate of the effective population size (Ne), since theta = 4 * Ne * μ.
+
+The software is based on a Perl script called Variance-sliding.pl, which performs the calculations using sliding windows defined by the user through parameters.
+
+The required parameters are:
+
+    The statistic or measure we want to compute, in our case π (pi)
+
+    The pool size, referring to the number of haplotypes (i.e., number of chromosomes)
+
+    The sequencing method
+
+    The minimum count required for a position to be considered a SNP
+
+    The minimum coverage for a position to be taken into account
+
+    The maximum coverage
+
+    The window size, in our case 10,000 positions
+
+    The step size between windows, which we set to 1 so that there are no gaps but also no overlaps, thus covering the entire genome
