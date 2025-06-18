@@ -190,9 +190,9 @@ To run the genomic software Popoolation, we use the script called popoolation.sh
 source /users-d2/c.m.tinedo/.bashrc
 
 perl /users-d2/c.m.tinedo/sweeps/popoolation/Variance-sliding.pl \
-  --input /users-d2/c.m.tinedo/sweeps/S20660000922_sm_nm_y_p_nonX.pileup \
-  --output /users-d2/c.m.tinedo/sweeps/popoolation/variance_S20660000922_sm_nm_y_p_nonX.pileup \
-  --snp-output snps_nonX_usados_S20660000922.txt \
+  --input /users-d2/c.m.tinedo/sweeps/popEXAMPLE_sm_nm_y_p_nonX.pileup \
+  --output /users-d2/c.m.tinedo/sweeps/popoolation/variance_popEXAMPLE_sm_nm_y_p_nonX.pileup \
+  --snp-output snps_nonX_usados_popEXAMPLE.txt \
   --measure pi \
   --pool-size 100 \
   --fastq-type illumina \
@@ -203,4 +203,22 @@ perl /users-d2/c.m.tinedo/sweeps/popoolation/Variance-sliding.pl \
   --step-size 1
 ```
 
+Once the results from Popoolation are obtained, we do not have the nucleotide diversity per pool, but rather per position. To obtain the global value, we need to filter and calculate the average. First, we filter out the positions with no data using the BASH script colador.sh.
+
+```
+#!/bin/bash
+
+input="variance_popEXAMPLE_sm_nm_y_p_nonX.pileup"
+
+output="filtrado_variance_popEXAMPLE_sm_nm_y_p_nonX.pileup"
+
+awk '$4 != "0.000"' "$input" > "$output"
+
+```
+
+Once we obtain the filtered outputs, we calculate the average using the AWK command directly in the Linux terminal.
+
+```
+awk '{sum += $4} END {print sum/NR}' filtrado_variance_popEXAMPLE_sm_nm_y_p_nonX.txt
+```
 
