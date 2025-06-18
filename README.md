@@ -171,18 +171,11 @@ The software is based on a Perl script called Variance-sliding.pl, which perform
 
 The required parameters are:
 
-    The statistic or measure we want to compute, in our case π (pi)
-
-    The pool size, referring to the number of haplotypes (i.e., number of chromosomes)
-
-    The sequencing method
-
-    The minimum count required for a position to be considered a SNP
-
-    The minimum coverage for a position to be taken into account
-
-    The maximum coverage
-
-    The window size, in our case 10,000 positions
-
-    The step size between windows, which we set to 1 so that there are no gaps but also no overlaps, thus covering the entire genome
+- The statistic or measure we want to compute, in our case π (pi)
+- The pool size, referring to the number of haplotypes (i.e., number of chromosomes)
+- The sequencing method
+- The minimum count required for a position to be considered a SNP
+- The minimum coverage for a position to be taken into account
+- The maximum coverage
+- The window size, in our case 10,000 positions
+- The step size between windows, which we set to 1 so that there are no gaps but also no overlaps, thus covering the entire genome
