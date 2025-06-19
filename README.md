@@ -222,3 +222,56 @@ Once we obtain the filtered outputs, we calculate the average using the AWK comm
 awk '{sum += $4} END {print sum/NR}' filtrado_variance_popEXAMPLE_sm_nm_y_p_nonX.txt
 ```
 
+## Sweep detection with Pool-HMM
+
+Once we have the nucleotide variability, we can use it as a flag in the Pool-HMM software to detect sweeps.
+Pool-HMM is a software that detects hard sweeps from pools. It is built in Python and requires the pool’s pileup file, the program’s Python script, the number of chromosomes, theta, k (the probability of a model change), the minimum coverage, and the number of CPUs to parallelize the process.
+
+Pool-HMM scans the genome in search of regions lacking variability, which may indicate a possible sweep. It classifies positions into three models:
+
+1 -> Neutral model: positions not under the effect of selection.
+2 -> Purifying selection model: positions where deleterious variants are removed by natural selection.
+3 -> Positive selection model: positions under directional selection, where a new advantageous mutation rapidly increases in frequency. This is the model of interest to us.
+
+One limitation of Pool-HMM is that it does not distinguish positions by chromosome, so we must differentiate them manually. Otherwise, it merges positions from different chromosomes and produces sweeps that do not actually exist.
+
+Below, I explain the parameters used in Pool-HMM:
+
+- K -> the probability of a model change from one position to another. This parameter has been defined based on the literature, although other authors have obtained it through simulations.
+- Theta -> an estimate of nucleotide variability, which is related to Me. It has been calculated using the Popoolation software.
+- n -> estimated based on the number of individuals in the pool and whether the chromosome is autosomal or sex-linked.
+- c -> the minimum coverage a position must have to be considered.
+- P -> the number of CPUs to be used for process parallelization.
+
+Attached is the BASH script used to run the genomic software, called prove_tfg.sh:
+
+```
+#!/bin/bash
+#$ -cwd
+#$ -V
+
+pop="popEXAMPLE"
+
+
+source /users-d2/c.m.tinedo/.bashrc
+conda activate sweeps_tini
+
+for i in 2L 2R 3L 3R
+
+do
+
+  grep "$i" /users-d2/c.m.tinedo/sweeps/parametres/${pop}_filtrado_tab.pileup > /users-d2/c.m.tinedo/sweeps/parametres/${pop}_${i}.pileup
+  python /users-d2/c.m.tinedo/sweeps/poolhmm/PoolHMM-master/pool-hmm.py \
+        --prefix /users-d2/c.m.tinedo/sweeps/parametres/${pop}_${i} \
+        -n 100 \
+        --pred \
+        -k 0.0000000001 \
+        --theta 0.005 \
+        -c 15 \
+        -r 20 \
+        -P 10
+done`
+
+```
+
+Two tests were performed using Pool-HMM. One with k = 0.00001 and another with k = 0.0000000001. In other words, we conducted one more liberal test and another more conservative one to eliminate false positives, although a manual check is later carried out to see which region of the chromosome each one belongs to.
