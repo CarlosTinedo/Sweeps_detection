@@ -277,3 +277,31 @@ done`
 ```
 
 Two tests were performed using Pool-HMM. One with k = 0.00001 and another with k = 0.0000000001. In other words, we conducted one more liberal test and another more conservative one to eliminate false positives, although a manual check is later carried out to see which region of the chromosome each one belongs to.
+
+## Biological significance of sweeps
+
+Once we have obtained the sweeps, the next step is to assign significance to them and determine whether or not they are related to the trait under study, or to understand what they are involved in.
+To do this, we first need to extract the nucleotide sequence corresponding to each sweep. This is done using bedtools and by creating a file. The BED file is simply a file where the first column contains the chromosome, the second column the start position, and the third column the end position of the sweep.
+Once the file is created, we can use the bioinformatics tool bedtools to extract the nucleotide sequence from the FASTA reference genome using the BED file. Below is the command-line used.
+
+```
+bedtools getfasta -fi /users-d3/alex.sanchez/DroSA/fastq2mpileup/viejo/holo_genome_r6.58.r2.02.fa -bed sweepsim_tab.bed > sweepsim.fasta
+```
+
+Example for BED file:
+
+```
+Dsim_2L 20804830        20807738
+Dsim_2L 21836578        21838272
+Dsim_2L 22564963        22567848
+Dsim_2R 3023444 3145178
+Dsim_2R 1080989 1088737
+Dsim_2R 2011661 2011820
+Dsim_3L 11465673        11465929
+Dsim_3L 11660003        11665137
+Dsim_3L 17137972        17351275
+Dsim_3L 23224516        23225641
+Dsim_3L 522916  523340
+Dsim_3L 24060380        2406047
+```
+
