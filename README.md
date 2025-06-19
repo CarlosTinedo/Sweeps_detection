@@ -230,7 +230,9 @@ Pool-HMM is a software that detects hard sweeps from pools. It is built in Pytho
 Pool-HMM scans the genome in search of regions lacking variability, which may indicate a possible sweep. It classifies positions into three models:
 
 1 -> Neutral model: positions not under the effect of selection.
+
 2 -> Purifying selection model: positions where deleterious variants are removed by natural selection.
+
 3 -> Positive selection model: positions under directional selection, where a new advantageous mutation rapidly increases in frequency. This is the model of interest to us.
 
 One limitation of Pool-HMM is that it does not distinguish positions by chromosome, so we must differentiate them manually. Otherwise, it merges positions from different chromosomes and produces sweeps that do not actually exist.
